@@ -16,7 +16,7 @@ app.get("/repositories", (request, response) => {
 app.post("/repositories", (request, response) => {
   const { title, url, techs } = request.body;
 
-  const project = {
+  const repository = {
     id: uuid(),
     title,
     url,
@@ -24,42 +24,42 @@ app.post("/repositories", (request, response) => {
     likes: 0,
   };
 
-  repositories.push(project);
+  repositories.push(repository);
 
-  return response.json(project);
+  return response.json(repository);
 });
 
 app.put("/repositories/:id", (request, response) => {
   const { id } = request.params;
   const { url, title, techs } = request.body;
 
-  const projectExist = repositories.findIndex(p => p.id === id);
+  const repositoryExist = repositories.findIndex(p => p.id === id);
 
-  if (projectExist !== -1) {
-    const project = {
+  if (repositoryExist !== -1) {
+    const repository = {
       id,
       url,
       title,
       techs,
-      likes: repositories[projectExist].likes,
+      likes: repositories[repositoryExist].likes,
     };
   
-    return response.json(project);
+    return response.json(repository);
   }
 
-  return response.status(400).json({ error: 'Project already exist' });
+  return response.status(400).json({ error: 'Repository already exist' });
 });
 
 app.delete("/repositories/:id", (request, response) => {
   const { id } = request.params;
 
-  const projectExist = repositories.findIndex(repository => repository.id === id);
+  const repositoryExist = repositories.findIndex(repository => repository.id === id);
 
-  if (projectExist === -1) {
+  if (repositoryExist === -1) {
     return response.status(400).json({ error: 'Project not found' });
   }
 
-  repositories.splice(projectExist, 1);
+  repositories.splice(repositoryExist, 1);
 
   return response.status(204).send();
 });
@@ -67,13 +67,13 @@ app.delete("/repositories/:id", (request, response) => {
 app.post("/repositories/:id/like", (request, response) => {
   const { id } = request.params;
 
-  const projectExist = repositories.findIndex(p => p.id === id);
+  const repositoryExist = repositories.findIndex(p => p.id === id);
 
-  if (projectExist !== -1) {
+  if (repositoryExist !== -1) {
 
-    repositories[projectExist].likes += 1;
+    repositories[repositoryExist].likes += 1;
   
-    return response.json(repositories[projectExist]);
+    return response.json(repositories[repositoryExist]);
   }
 
   return response.status(400).json({ error: 'Project not found' });
